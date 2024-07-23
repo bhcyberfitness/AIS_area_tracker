@@ -2,7 +2,7 @@ import threading
 from fastapi import FastAPI, Query
 from pydantic import BaseModel
 from typing import List
-from vessels import Vessel, vessels, start_ais_stream, POINT
+from backend.vessels import Vessel, vessels, start_ais_stream, POINT
 
 app = FastAPI()
 
