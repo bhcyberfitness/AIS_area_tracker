@@ -1,17 +1,64 @@
 import asyncio
-import websockets
 import json
+import websockets
 from datetime import datetime, timezone
 from haversine import haversine, inverse_haversine, Direction, Unit
 from math import radians, cos, sin, asin, sqrt, pi
 
-POINT = (51.0778901822819, 1.6343353611675495)
+# Define area for AIS message bounding box (approximates to a RADIUS by RADIUS
+# nautical mile square area centered on POINT)
+POINT = (51.0778901822819, 1.6343353611675495) # Decimal lat/long coordinates
 RADIUS = 6
 TOP_LEFT = inverse_haversine(POINT, RADIUS*sqrt(2), Direction.NORTHWEST, unit=Unit.NAUTICAL_MILES)
 BOTTOM_RIGHT = inverse_haversine(POINT, RADIUS*sqrt(2), Direction.SOUTHEAST, unit=Unit.NAUTICAL_MILES)
 
 class Vessel:
+	"""
+	A class used to represent a vessel transmitting on AIS
+
+	Attributes
+	----------
+	mmsi : int
+		the MMSI number of the vessel
+	lat : float
+		the decimal latitude of the vessel
+	long : float
+		the decimal longitude of the vessel
+	course : float
+		the course over ground in degrees of the vessel 
+	speed : float
+		the speed over ground in knots of the vessel
+	name : str
+		the broadcasted name of the vessel
+	
+	Methods
+	-------
+	distance_to_point(point)
+		computes haversine distance in nautical miles from the vessel to a point
+	future_position(minutes)
+		computes dead reckoned position in specified time in minutes
+	will_be_within_distance(point, threshold)
+		computes whether the vessel will be within a certain distance of specified point at any time in next hour
+	"""
+
 	def __init__(self, mmsi=0, lat=0, long=0, course=0, speed=0, name="NO_NAME"):
+		"""
+		Parameters
+		----------
+		mmsi : int
+			the MMSI number of the vessel
+		lat : float
+			the decimal latitude of the vessel
+		long : float
+			the decimal longitude of the vessel
+		course : float
+			the course over ground in degrees of the vessel 
+		speed : float
+			the speed over ground in knots of the vessel
+		name : str
+			the broadcasted name of the vessel
+		"""
+		
 		self.mmsi = mmsi
 		self.lat = lat
 		self.long = long
