@@ -30,6 +30,8 @@ class Vessel:
 		the speed over ground in knots of the vessel
 	name : str
 		the broadcasted name of the vessel
+	threat: str
+		the threat level (blue, white or red) of the vessel
 	
 	Methods
 	-------
@@ -41,7 +43,7 @@ class Vessel:
 		computes whether the vessel will be within a certain distance of specified point at any time in next hour
 	"""
 
-	def __init__(self, mmsi=0, lat=0, long=0, course=0, speed=0, name="NO_NAME"):
+	def __init__(self, mmsi=0, lat=0, long=0, course=0, speed=0, name="NO_NAME", threat="white"):
 		"""
 		Parameters
 		----------
@@ -57,6 +59,8 @@ class Vessel:
 			the speed over ground in knots of the vessel
 		name : str
 			the broadcasted name of the vessel
+		threat: str
+			the threat level (blue, white or red) of the vessel
 		"""
 		
 		self.mmsi = mmsi
@@ -65,6 +69,7 @@ class Vessel:
 		self.course = course
 		self.speed = speed
 		self.name = name
+		self.threat = threat
 	
 	def distance_to_point(self, point):
 		return haversine((self.lat, self.long), point, unit=Unit.NAUTICAL_MILES)

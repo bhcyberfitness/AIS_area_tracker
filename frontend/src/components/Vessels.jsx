@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
 	Box,
 	Button,
     Flex,
+	FormControl,
+	FormLabel,
     Input,
     InputGroup,
     Modal,
@@ -12,10 +14,12 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
+	Select,
     Stack,
     Text,
     useDisclosure
 } from "@chakra-ui/react";
+import { VesselsContext } from "./VesselsContext";
 
 /* const VesselsContext = React.createContext({
 	vessels: [], fetchVessels: () => {}
@@ -44,24 +48,77 @@ export default function Vessels() {
 } */
 
 const Vessels = () => {
-	const [vessels, setVessels] = useState([]);
+	const { vessels, updateVessel } = useContext(VesselsContext);
+	const { isOpen, onOpen, onClose } = useDisclosure();
+	const [selectedVessel, setSelectedVessel] = useState(null);
+	const [threat, setThreat] = useState('');
 
-	useEffect(() => {
-		fetch("http://localhost:8000/vessels")
-			.then(response => response.json())
-			.then(data => setVessels(data))
-			.catch(error => console.error("Error fetching vessels:", error));
-	}, []);
+	const handleUpdateClick = (vessel) => {
+		setSelectedVessel(vessel);
+		setThreat(vessel.threat || '');
+		onOpen();
+	};
+
+	const handleSubmit = () => {
+		if (selectedVessel) {
+			updateVessel(selectedVessel.mmsi, threat);
+			onClose();
+		}
+	};
+
+/* 	return (
+		<Stack spacing={4}>
+		
+			{vessels.map(vessel => (
+				<li key={vessel.mmsi}><b>{vessel.name}</b> - Lat: {vessel.lat.toFixed(3)}, Long: {vessel.long.toFixed(3)}, Threat: {vessel.threat}</li>
+			))}
+			
+		</Stack>
+	); */
 
 	return (
-		<Stack spacing={5}>
-			<ul>
-				{vessels.map(vessel => (
-					<li key={vessel.mmsi}>{vessel.name} - Lat: {vessel.lat.toFixed(2)}, Long: {vessel.long.toFixed(2)}</li>
-				))}
-			</ul>
-		</Stack>
-	);
+		<div>
+		  <ul>
+			{vessels.map((vessel) => (
+			  <li key={vessel.mmsi}>
+				{vessel.name} - Lat: {vessel.lat.toFixed(3)}, Long: {vessel.long.toFixed(3)}, Threat: {vessel.threat}
+				<Button onClick={() => handleUpdateClick(vessel)} ml={4}>
+				  Update Threat
+				</Button>
+			  </li>
+			))}
+		  </ul>
+	
+		  <Modal isOpen={isOpen} onClose={onClose}>
+			<ModalOverlay />
+			<ModalContent>
+			  <ModalHeader>Update Vessel Threat</ModalHeader>
+			  <ModalCloseButton />
+			  <ModalBody>
+				<FormControl>
+				  <FormLabel>Threat Level</FormLabel>
+				  <Select
+					placeholder="Select threat level"
+					value={threat}
+					onChange={(e) => setThreat(e.target.value)}
+				  >
+					<option value="blue">Blue</option>
+					<option value="white">White</option>
+					<option value="red">Red</option>
+				  </Select>
+				</FormControl>
+			  </ModalBody>
+	
+			  <ModalFooter>
+				<Button colorScheme="blue" mr={3} onClick={handleSubmit}>
+				  Update
+				</Button>
+				<Button variant="ghost" onClick={onClose}>Cancel</Button>
+			  </ModalFooter>
+			</ModalContent>
+		  </Modal>
+		</div>
+	  );
 };
 
 export default Vessels;

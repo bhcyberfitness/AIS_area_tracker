@@ -27,7 +27,11 @@ class VesselModel(BaseModel):
 	long: float
 	course: float
 	speed: float
-	name: str	
+	name: str
+	threat: str	
+
+class ThreatUpdateModel(BaseModel):
+	threat: str
 
 @app.get("/")
 def read_root():
@@ -41,6 +45,19 @@ def get_vessels():
 def vessels_within_distance(threshold: float = Query(..., description="Distance threshold in nautical miles")):
 	nearby_vessels = [vessel for vessel in vessels if vessel.will_be_within_distance(POINT, threshold)]
 	return nearby_vessels
+
+@app.put("/vessels/{mmsi}", tags=["vessels"])
+def update_vessel(mmsi: int, threat_update: ThreatUpdateModel):
+	for vessel in vessels:
+		if vessel.mmsi == mmsi:
+			vessel.threat = threat_update.threat
+			return {
+				"data": f"Vessel {mmsi} threat has been updated."
+			}
+	return {
+		"data": f"Vessel {mmsi} not found."
+	}
+
 
 def start_stream():
 	thread = threading.Thread(target=start_ais_stream)
