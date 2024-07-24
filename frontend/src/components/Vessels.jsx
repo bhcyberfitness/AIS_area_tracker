@@ -84,21 +84,12 @@ const Vessels = () => {
 		}
 	};
 
+	const sortedVessels = [...vessels].sort((a, b) => a.range - b.range);
+
 	return (
 		<Box bg="gray.700" minH="100vh" p={5}>
-{/* 		  <ul>
-			{vessels.map((vessel) => (
-			  <li key={vessel.mmsi}>
-				{vessel.name} - Lat: {vessel.lat.toFixed(3)}, Long: {vessel.long.toFixed(3)}, Threat: {vessel.threat}
-				<Button onClick={() => handleUpdateClick(vessel)} ml={4}>
-				  Update Threat
-				</Button>
-			  </li>
-			))}
-		  </ul> */}
-
 			<SimpleGrid columns={{ sm: 2, md: 4, lg: 6}} spacing={5}>
-				{vessels.map((vessel) => (
+				{sortedVessels.map((vessel) => (
 					<Card
 						key={vessel.mmsi}
 						borderwidth="1px"
@@ -107,10 +98,12 @@ const Vessels = () => {
 					>
 						<CardHeader>
 							<Heading size="md">{vessel.name}</Heading>
+							<Heading size="sm">MMSI: {vessel.mmsi}</Heading>
 						</CardHeader>
 						<CardBody>
 							<Text>Lat: {vessel.lat.toFixed(3)}</Text>
 							<Text>Long: {vessel.long.toFixed(3)}</Text>
+							<Text>Range: {vessel.range.toFixed(3)}</Text>
 							<Text>Threat Level: {vessel.threat}</Text>
 						</CardBody>
 						<CardFooter>

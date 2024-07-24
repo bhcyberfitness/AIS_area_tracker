@@ -28,7 +28,8 @@ class VesselModel(BaseModel):
 	course: float
 	speed: float
 	name: str
-	threat: str	
+	threat: str
+	range: float	
 
 class ThreatUpdateModel(BaseModel):
 	threat: str

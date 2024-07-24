@@ -7,7 +7,7 @@ from math import radians, cos, sin, asin, sqrt, pi
 
 # Define area for AIS message bounding box (approximates to a RADIUS by RADIUS
 # nautical mile square area centered on POINT)
-POINT = (50.56579378237965 , -2.3057556152343754) # Decimal lat/long coordinates
+POINT = (50.761001904299036 , -1.1063575744628908) # Decimal lat/long coordinates
 RADIUS = 6
 TOP_LEFT = inverse_haversine(POINT, RADIUS*sqrt(2), Direction.NORTHWEST, unit=Unit.NAUTICAL_MILES)
 BOTTOM_RIGHT = inverse_haversine(POINT, RADIUS*sqrt(2), Direction.SOUTHEAST, unit=Unit.NAUTICAL_MILES)
@@ -43,7 +43,7 @@ class Vessel:
 		computes whether the vessel will be within a certain distance of specified point at any time in next hour
 	"""
 
-	def __init__(self, mmsi=0, lat=0, long=0, course=0, speed=0, name="NO_NAME", threat="white"):
+	def __init__(self, mmsi=0, lat=0, long=0, course=0, speed=0, name="NO_NAME", threat="white", range=0):
 		"""
 		Parameters
 		----------
@@ -61,6 +61,7 @@ class Vessel:
 			the broadcasted name of the vessel
 		threat: str
 			the threat level (blue, white or red) of the vessel
+			
 		"""
 		
 		self.mmsi = mmsi
@@ -70,6 +71,7 @@ class Vessel:
 		self.speed = speed
 		self.name = name
 		self.threat = threat
+		self.range = self.distance_to_point(POINT)
 	
 	def distance_to_point(self, point):
 		return haversine((self.lat, self.long), point, unit=Unit.NAUTICAL_MILES)
@@ -93,7 +95,7 @@ class Vessel:
 vessels = []
 
 async def connect_ais_stream():
-	filename = 'backend/apikey'
+	filename = 'apikey'
 	try:
 		with open(filename, 'r') as f:
 			key = f.read().strip()
@@ -123,6 +125,7 @@ async def connect_ais_stream():
 						vessel.long = ais_message['Longitude']
 						vessel.course = ais_message['Cog']
 						vessel.speed = ais_message['Sog']
+						vessel.range = vessel.distance_to_point(POINT)
 						vessel_not_in_list = False
 				
 				if vessel_not_in_list:
