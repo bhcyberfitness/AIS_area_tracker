@@ -2,22 +2,28 @@ import React, { useContext, useEffect, useState } from "react";
 import {
 	Box,
 	Button,
-    Flex,
+	Card,
+	CardBody,
+	CardFooter,
+	CardHeader,
+	Flex,
 	FormControl,
 	FormLabel,
-    Input,
-    InputGroup,
-    Modal,
-    ModalBody,
-    ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalOverlay,
+	Heading,
+	Input,
+	InputGroup,
+	Modal,
+	ModalBody,
+	ModalCloseButton,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	ModalOverlay,
 	Select,
-    Stack,
-    Text,
-    useDisclosure
+	SimpleGrid,
+	Stack,
+	Text,
+	useDisclosure
 } from "@chakra-ui/react";
 import { VesselsContext } from "./VesselsContext";
 
@@ -66,19 +72,21 @@ const Vessels = () => {
 		}
 	};
 
-/* 	return (
-		<Stack spacing={4}>
-		
-			{vessels.map(vessel => (
-				<li key={vessel.mmsi}><b>{vessel.name}</b> - Lat: {vessel.lat.toFixed(3)}, Long: {vessel.long.toFixed(3)}, Threat: {vessel.threat}</li>
-			))}
-			
-		</Stack>
-	); */
+	const getCardStyle = (threat) => {
+		switch (threat) {
+			case 'blue':
+				return { bg: 'blue.500', opacity: 0.6 };
+			case 'white':
+				return { bg: 'gray.300', opacity: 1 };
+			case 'red':
+				return { bg: 'red.500', opacity: 1 };
+					
+		}
+	};
 
 	return (
-		<div>
-		  <ul>
+		<Box bg="gray.700" minH="100vh" p={5}>
+{/* 		  <ul>
 			{vessels.map((vessel) => (
 			  <li key={vessel.mmsi}>
 				{vessel.name} - Lat: {vessel.lat.toFixed(3)}, Long: {vessel.long.toFixed(3)}, Threat: {vessel.threat}
@@ -87,7 +95,30 @@ const Vessels = () => {
 				</Button>
 			  </li>
 			))}
-		  </ul>
+		  </ul> */}
+
+			<SimpleGrid columns={{ sm: 2, md: 4, lg: 6}} spacing={5}>
+				{vessels.map((vessel) => (
+					<Card
+						key={vessel.mmsi}
+						borderwidth="1px"
+						borderRadius="lg"
+						{...getCardStyle(vessel.threat)}
+					>
+						<CardHeader>
+							<Heading size="md">{vessel.name}</Heading>
+						</CardHeader>
+						<CardBody>
+							<Text>Lat: {vessel.lat.toFixed(3)}</Text>
+							<Text>Long: {vessel.long.toFixed(3)}</Text>
+							<Text>Threat Level: {vessel.threat}</Text>
+						</CardBody>
+						<CardFooter>
+							<Button onClick={() => handleUpdateClick(vessel)} colorScheme="teal">Update Threat</Button>
+						</CardFooter>
+					</Card>
+				))}
+			</SimpleGrid>
 	
 		  <Modal isOpen={isOpen} onClose={onClose}>
 			<ModalOverlay />
@@ -117,7 +148,7 @@ const Vessels = () => {
 			  </ModalFooter>
 			</ModalContent>
 		  </Modal>
-		</div>
+		</Box>
 	  );
 };
 
