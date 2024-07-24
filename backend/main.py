@@ -1,10 +1,25 @@
 import threading
+import uvicorn
 from fastapi import FastAPI, Query
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
-from backend.vessels import Vessel, vessels, start_ais_stream, POINT
+from vessels import Vessel, vessels, start_ais_stream, POINT
 
 app = FastAPI()
+
+origins = [
+	"http://localhost:3000",
+	"localhost:3000"
+]
+
+app.add_middleware(
+	CORSMiddleware,
+	allow_origins=origins,
+	allow_credentials=True,
+	allow_methods=["*"],
+	allow_headers=["*"]
+)
 
 class VesselModel(BaseModel):
 	mmsi: int
@@ -33,5 +48,4 @@ def start_stream():
 
 if __name__ == "__main__":
 	start_stream()
-	import uvicorn
 	uvicorn.run(app, host="127.0.0.1", port=8000)

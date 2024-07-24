@@ -7,7 +7,7 @@ from math import radians, cos, sin, asin, sqrt, pi
 
 # Define area for AIS message bounding box (approximates to a RADIUS by RADIUS
 # nautical mile square area centered on POINT)
-POINT = (51.0778901822819, 1.6343353611675495) # Decimal lat/long coordinates
+POINT = (50.56579378237965 , -2.3057556152343754) # Decimal lat/long coordinates
 RADIUS = 6
 TOP_LEFT = inverse_haversine(POINT, RADIUS*sqrt(2), Direction.NORTHWEST, unit=Unit.NAUTICAL_MILES)
 BOTTOM_RIGHT = inverse_haversine(POINT, RADIUS*sqrt(2), Direction.SOUTHEAST, unit=Unit.NAUTICAL_MILES)
@@ -88,7 +88,7 @@ class Vessel:
 vessels = []
 
 async def connect_ais_stream():
-	filename = 'apikey'
+	filename = 'backend/apikey'
 	try:
 		with open(filename, 'r') as f:
 			key = f.read().strip()
