@@ -6,6 +6,7 @@ This project was created 23-24 July 2024 to help me learn Python and JavaScript.
 
 - Display all vessels within a specified bounding box, using AIS messages from aisstream.io.
 - Set threat levels of vessels to blue (friendly), white (neutral) or red (hostile).
+- Display all vessels within a specified range of the point, or those that will enter the range in the future based on current course and speed. (There is no frontend for this feature yet but it is accessed at GET /vessels_within_distance?threshold={distance})
 
 ## Getting Started
 
