@@ -1,12 +1,11 @@
-# Vessel Dashboard
+# AIS Area Tracker
 
 This project was created 23-24 July 2024 to help me learn Python and JavaScript. The provides a dashboard to visualize nearby vessels to a specified position. It includes a backend service to handle vessel data and a frontend to display the information.
 
 ## Features
 
-- Display nearby vessels within a specified distance.
-- Update threat levels of vessels.
-- Real-time data streaming from AIS service.
+- Display all vessels within a specified bounding box, using AIS messages from aisstream.io.
+- Set threat levels of vessels to blue (friendly), white (neutral) or red (hostile).
 
 ## Getting Started
 
@@ -23,8 +22,8 @@ This project was created 23-24 July 2024 to help me learn Python and JavaScript.
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/yourusername/vessel-dashboard.git
-    cd vessel-dashboard
+    git clone https://github.com/bhcyberfitness/AIS_area_tracker.git
+    cd AIS_area_tracker
     ```
 
 2. **Set up the backend:**
@@ -41,13 +40,11 @@ This project was created 23-24 July 2024 to help me learn Python and JavaScript.
         ```bash
         pip install -r requirements.txt
         ```
-    - Set the AIS API key in your environment:
-        ```bash
-        export AIS_API_KEY=your_api_key  # On Windows use `set AIS_API_KEY=your_api_key`
-        ```
+    - Create the file apikey in backend with aisstream.io API key (these are free):
+       
     - Run the FastAPI server:
         ```bash
-        uvicorn main:app --reload
+        python main.py
         ```
 
 3. **Set up the frontend:**
