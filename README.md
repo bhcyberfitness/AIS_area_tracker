@@ -65,7 +65,7 @@ This project was created 23-24 July 2024 to help me learn Python and JavaScript.
 ### Usage
 
 - Access the frontend dashboard at `http://localhost:3000`.
-- The backend API is available at `http://127.0.0.1:8000`.
+- The backend API is available at `http://localhost:8000`.
 
 ### API Endpoints
 
